@@ -68,7 +68,7 @@ module.exports.loginUser = async function( req , res ){
             return res.status(412).json({ message : "Validation failed",errors: errors.array() ,status:false});
         }
 
-        //find via email
+        //find via phone
         
         let user = await User.findOne({phone : data.phone});
         let isMatch;
@@ -83,14 +83,15 @@ module.exports.loginUser = async function( req , res ){
                 
             })
         }
+
+        //Generating the Token
         let token =await jwt.sign(user.toJSON() , process.env.JWT_Secret , {expiresIn : '100000000'} );
 
         
-        // user is found
+        // user is found and Set token in Cookies
         return res.cookie("access_token",token ,{httpOnly:true}).status(200).json({
             message : "SignIn successfull",
             data : {
-                //here we generate the token using encrpt key "codeial"
                 access_token : token 
             },
             status:true
@@ -164,7 +165,7 @@ module.exports.getOrder = async function( req , res ){
 //Additional Feature
 module.exports.logOut = function(req , res ){
 
-    // let access_token = req.cookies.access_token;
+    //Clear token from cookie
 
     return res.clearCookie("access_token").status(200).json({
         message : "logOut successfully"

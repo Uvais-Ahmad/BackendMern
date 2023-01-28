@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+//for authenticate token
 const auth = (req , res , next )=>{
     const token = req.cookies.access_token;
     if(!token ){
@@ -6,6 +7,8 @@ const auth = (req , res , next )=>{
             message : "Token missing"
         })
     }
+
+    //verify the token and it return user object
     const decoded_token = jwt.verify(token ,process.env.JWT_Secret);
     if( !decoded_token ){
         return res.status(401).json({
