@@ -56,3 +56,51 @@ module.exports.addUser = async function(req , res ){
         })
     }     
 }
+
+
+module.exports.loginUser = async function( req , res ){
+    try{
+        let data = req.body;
+
+        //it checks validation at router level and result show in Controller
+        let errors = await validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(412).json({ message : "Validation failed",errors: errors.array() ,status:false});
+        }
+
+        //find via email
+        
+        let user = await User.findOne({phone : data.phone});
+        let isMatch;
+        if(user ){
+            isMatch = await bcrypt.compare(data.password , user.password);
+        }
+        
+        if( !user || !isMatch){
+            return res.status(401).json({
+                message : "Invalid username and password",
+                status:false
+                
+            })
+        }
+        let token =await jwt.sign(user.toJSON() , process.env.JWT_Secret , {expiresIn : '100000000'} );
+
+        
+        // user is found
+        return res.cookie("access_token",token ,{httpOnly:true}).status(200).json({
+            message : "SignIn successfull",
+            data : {
+                //here we generate the token using encrpt key "codeial"
+                access_token : token 
+            },
+            status:true
+        })
+    }
+    catch( err ){
+        console.log(err)
+        return res.status(400).json({
+            message : "Error while login",
+            status:false
+        })
+    }
+}   

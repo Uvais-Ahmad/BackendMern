@@ -9,7 +9,14 @@ router.post('/add-user',
         body('phone').isLength({min:10}).withMessage("Phone number is not correct must be min length 10"),
         body('password').isLength({min:1}).withMessage("Password required"),
         userC.addUser);
-router.post('/login-user');
+
+
+router.post('/login-user',
+        body('phone').isLength({min:10}).withMessage("Phone number is not correct must be min length 10"),
+        body('password').isLength({min:1}).withMessage("Password required"),
+        userC.loginUser);
+
+        
 router.post('/add-order');
 router.get('/get-order');
 
