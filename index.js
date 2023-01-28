@@ -4,11 +4,12 @@ const port = 8000;
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv').config();
-
+const db = require('./config/mongoose')
 app.use(cookieParser());
 app.use(express.urlencoded({extended : true}));
 
 
+app.use('/',require('./routers'));
 app.listen(port , function( err ){
     if(err){
         console.log('Error on running the server ')
