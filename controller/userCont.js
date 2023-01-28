@@ -158,3 +158,15 @@ module.exports.getOrder = async function( req , res ){
         })
     }
 }
+
+
+
+//Additional Feature
+module.exports.logOut = function(req , res ){
+
+    // let access_token = req.cookies.access_token;
+
+    return res.clearCookie("access_token").status(200).json({
+        message : "logOut successfully"
+    })
+}
