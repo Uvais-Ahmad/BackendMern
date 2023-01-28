@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 // For validating the form value at router level and check result of validation in controller
 const { validationResult } = require('express-validator');
+const Order = require('../models/order');
 
 //  To signup or create new user in db
 module.exports.addUser = async function(req , res ){
@@ -104,3 +105,27 @@ module.exports.loginUser = async function( req , res ){
         })
     }
 }   
+
+
+module.exports.addOrder = async function( req , res ){
+    try{
+        const data = req.body;
+        const order = await Order.create({sub_total : data.sub_total ,phone : data.phone , user : req.user._id });
+        return res.status(200).json({
+            message : "Order Added",
+            data : {
+                //here we generate the token using encrpt key "codeial"
+                orderDetail : order
+            },
+            status:true
+        })
+    }
+    catch( err ){
+        console.log(err)
+        return res.status(400).json({
+            message : "Error while adding order",
+            status:false
+        })
+    }
+    
+}

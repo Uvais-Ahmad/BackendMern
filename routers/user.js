@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/authenticateToken');
 
 const userC = require('../controller/userCont');
 const { body } = require('express-validator');
@@ -17,8 +18,14 @@ router.post('/login-user',
         userC.loginUser);
 
         
-router.post('/add-order');
-router.get('/get-order');
+router.post('/add-order',
+                body('sub_total').isLength({min:1}).withMessage("sub_total required "),
+                body('phone').isLength({min:10}).withMessage("phone required "),
+                auth,
+                userC.addOrder);
+
+                
+router.get('/get-order',auth);
 
 
 module.exports = router;
