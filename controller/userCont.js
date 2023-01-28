@@ -62,7 +62,6 @@ module.exports.addUser = async function(req , res ){
 module.exports.loginUser = async function( req , res ){
     try{
         let data = req.body;
-
         //it checks validation at router level and result show in Controller
         let errors = await validationResult(req);
         if (!errors.isEmpty()) {
@@ -128,4 +127,34 @@ module.exports.addOrder = async function( req , res ){
         })
     }
     
+}
+
+
+module.exports.getOrder = async function( req , res ){
+
+    try{
+        let userId = req.params.id;
+        let orders = await Order.find({user:userId});
+        if(!orders){
+            return res.status(400).json({
+                message : "Not Found",
+                status:false
+            })
+        }
+        return res.status(200).json({
+            message : "Order get",
+            data : {
+                orders : orders
+            },
+            status:true
+        })
+
+    }
+    catch( err ){
+        console.log(err)
+        return res.status(400).json({
+            message : "Error while finding order",
+            status:false
+        })
+    }
 }

@@ -24,8 +24,8 @@ router.post('/add-order',
                 auth,
                 userC.addOrder);
 
-                
-router.get('/get-order',auth);
+
+router.get('/get-order/:id',auth,userC.getOrder);
 
 
 module.exports = router;
