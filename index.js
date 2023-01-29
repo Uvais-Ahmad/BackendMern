@@ -5,8 +5,10 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv').config();
 const db = require('./config/mongoose')
+const cors = require('cors');
 app.use(cookieParser());
 app.use(express.urlencoded({extended : true}));
+app.use(cors());
 
 
 app.use('/',require('./routers'));
