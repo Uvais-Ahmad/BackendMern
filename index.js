@@ -8,6 +8,7 @@ const db = require('./config/mongoose')
 const cors = require('cors');
 app.use(cookieParser());
 app.use(express.urlencoded({extended : true}));
+app.use(express.json());
 app.use(cors());
 
 

@@ -67,7 +67,6 @@ module.exports.loginUser = async function( req , res ){
         if (!errors.isEmpty()) {
             return res.status(412).json({ message : "Validation failed",errors: errors.array() ,status:false});
         }
-
         //find via phone
         
         let user = await User.findOne({phone : data.phone});
