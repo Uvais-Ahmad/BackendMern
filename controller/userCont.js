@@ -91,7 +91,9 @@ module.exports.loginUser = async function( req , res ){
         return res.cookie("access_token",token ,{httpOnly:true}).status(200).json({
             message : "SignIn successfull",
             data : {
-                access_token : token 
+                access_token : token,
+                id : user._id,
+                name : user.name
             },
             status:true
         })
