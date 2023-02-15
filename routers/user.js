@@ -27,6 +27,11 @@ router.post('/add-order',
 
 router.get('/get-order/:id',auth,userC.getOrder);
 
+
+
+// ====================================================
+router.post('/order',userC.order);
+
 //additional feature
 router.get('/logout',auth , userC.logOut);
 

@@ -163,6 +163,15 @@ module.exports.getOrder = async function( req , res ){
 
 
 
+// ==============================================================
+
+module.exports.order = function( req , res ){
+    let data = req.body;
+    console.log("data receive for order ",data);
+    return;
+}
+
+
 //Additional Feature
 module.exports.logOut = function(req , res ){
 
