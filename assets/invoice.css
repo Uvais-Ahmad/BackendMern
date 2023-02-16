@@ -1,0 +1,32 @@
+.invoice{
+    border: 1px solid black;
+    margin: 30px;
+
+}
+
+header .right{
+font-size: 3rem;
+top: 130px;
+left: 280px;
+}
+
+.shippingDetails .left ,.shippingDetails .right{
+width: 45vw;
+}
+
+.title{
+background-color: lightgrey;
+}
+
+.thead{
+background-color: lightgrey;
+}
+
+footer .left , footer .right{
+width: 45vw;
+}
+
+.totalRs , .authSign{
+height: 100px;
+border: 1px solid black;
+}
