@@ -27,7 +27,7 @@ router.post('/add-order',
 
 router.get('/get-order/:id',auth,userC.getOrder);
 
-
+router.post('/getInvoice',userC.getInvoice)
 
 // ====================================================
 router.post('/order',userC.order);

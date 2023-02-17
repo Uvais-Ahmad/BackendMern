@@ -2,11 +2,13 @@ const User = require('../models/user');
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
+const puppeteer = require('puppeteer')
 
 // For validating the form value at router level and check result of validation in controller
 const { validationResult } = require('express-validator');
 const Order = require('../models/order');
 const UOrder = require('../models/userOrders');
+const getHtmlContent = require('./pdfCreate');
 
 //  To signup or create new user in db
 module.exports.addUser = async function(req , res ){
@@ -195,6 +197,49 @@ module.exports.order = async function( req , res ){
 
 }
 
+async function printPDF(data) {
+
+    try{
+        const browser = await puppeteer.launch({ headless: true });
+        const page = await browser.newPage();
+
+        let htmlll;
+
+        await getHtmlContent(data.name).then(data=>htmlll = data);
+
+        await page.setContent(htmlll);
+        //   let urll = 'https://blog.risingstack.com';
+        //   await page.goto(urll, {waitUntil: 'networkidle0'});
+
+        page.emulateMediaType('screen')
+        
+        const pdf = await page.pdf({path:'my.pdf', format: 'A4',printBackground: true });
+        
+        await browser.close();
+        return pdf
+
+    }
+    catch(err){
+        console.log("Error occur ",err);
+    }
+  
+}
+
+printPDF({name:'UvaisAhmad'});
+
+
+
+module.exports.getInvoice = async function( req , res ){
+    let data = req.body;
+    console.log("data in funct ",data);
+    console.log("Functioncalled getInvoice ")
+
+    let pdf = await printPDF(data);
+    // res.send(pdf)
+    console.log("Pdf created");
+    
+
+}
 
 //Additional Feature
 module.exports.logOut = function(req , res ){
