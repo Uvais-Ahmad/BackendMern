@@ -23,9 +23,7 @@ router.post('/login-user',
 router.post('/getInvoice',userC.getInvoice)
 
 //to download the generated Invoice
-router.get('/downloadInvoice',( req , res )=>{
-        return res.download(path.join(__dirname,'../my.pdf'));
-})
+router.get('/downloadInvoice',userC.downloadInvoice);
 
 // To store order of user in Database
 router.post('/order',userC.order);

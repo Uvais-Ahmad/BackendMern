@@ -189,6 +189,10 @@ module.exports.getInvoice = async function( req , res ){
     
 }
 
+module.exports.downloadInvoice = function ( req , res ){
+    return res.download(path.join(__dirname,'../my.pdf'));
+}
+
 
 //Additional Feature
 module.exports.logOut = function(req , res ){
