@@ -171,12 +171,19 @@ module.exports.getOrder = async function( req , res ){
 module.exports.order = async function( req , res ){
 
     try{
-
-    
+        let arrOfBody = [];
         let data = req.body;
+        if( !Array.isArray(data)){
+            arrOfBody.push(data);
+        }
+        else arrOfBody = data;
+        
+
+        console.log("Data in controller ",arrOfBody);
+        
         console.log("Req Body ",data);
-        let order = await UOrder.create(req.body);
-        console.log("data receive for order ",data);
+        let order = await UOrder.create(arrOfBody);
+        console.log("data receive for order ",order);
 
         return res.status(200).json({
             message : "Order Added",
@@ -212,7 +219,7 @@ async function printPDF(data) {
         //   await page.goto(urll, {waitUntil: 'networkidle0'});
 
         page.emulateMediaType('screen')
-        
+
         const pdf = await page.pdf({path:'my.pdf', format: 'A4',printBackground: true });
         
         await browser.close();
@@ -225,10 +232,6 @@ async function printPDF(data) {
   
 }
 
-printPDF({name:'UvaisAhmad'});
-
-
-
 module.exports.getInvoice = async function( req , res ){
     let data = req.body;
     console.log("data in funct ",data);
@@ -236,10 +239,13 @@ module.exports.getInvoice = async function( req , res ){
 
     let pdf = await printPDF(data);
     // res.send(pdf)
+    await res.setHeader('Content-Type','application/pdf');
+    await res.status(200).send(pdf)
+    
     console.log("Pdf created");
     
-
 }
+
 
 //Additional Feature
 module.exports.logOut = function(req , res ){
