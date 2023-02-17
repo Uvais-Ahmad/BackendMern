@@ -113,64 +113,7 @@ module.exports.loginUser = async function( req , res ){
     }
 }   
 
-
-module.exports.addOrder = async function( req , res ){
-    try{
-        const data = req.body;
-        const order = await Order.create({sub_total : data.sub_total ,phone : data.phone , user : req.user._id });
-        return res.status(200).json({
-            message : "Order Added",
-            data : {
-                //here we generate the token using encrpt key "codeial"
-                orderDetail : order
-            },
-            status:true
-        })
-    }
-    catch( err ){
-        console.log(err)
-        return res.status(400).json({
-            message : "Error while adding order",
-            status:false
-        })
-    }
-    
-}
-
-
-module.exports.getOrder = async function( req , res ){
-
-    try{
-        let userId = req.params.id;
-        let orders = await Order.find({user:userId});
-        if(!orders){
-            return res.status(400).json({
-                message : "Not Found",
-                status:false
-            })
-        }
-        return res.status(200).json({
-            message : "Order get",
-            data : {
-                orders : orders
-            },
-            status:true
-        })
-
-    }
-    catch( err ){
-        console.log(err)
-        return res.status(400).json({
-            message : "Error while finding order",
-            status:false
-        })
-    }
-}
-
-
-
-// ==============================================================
-
+//To store user product order in Db
 module.exports.order = async function( req , res ){
 
     try{
@@ -202,6 +145,7 @@ module.exports.order = async function( req , res ){
 
 }
 
+//used to set Data into Invoice
 async function printPDF(data) {
 
     try{
@@ -213,8 +157,6 @@ async function printPDF(data) {
         await getHtmlContent(data).then(data=>htmlll = data);
 
         await page.setContent(htmlll);
-        //   let urll = 'https://blog.risingstack.com';
-        //   await page.goto(urll, {waitUntil: 'networkidle0'});
 
         page.emulateMediaType('screen')
 
@@ -240,11 +182,10 @@ module.exports.getInvoice = async function( req , res ){
     else arrOfBody = data;
 
     let pdf = await printPDF(arrOfBody);
-    // res.send(pdf)
+    
     await res.setHeader('Content-Type','application/pdf');
     await res.status(200).send(pdf)
     console.log("Pdf created");
-    // return res.download(path.join(__dirname,'../my.pdf'));
     
 }
 
@@ -253,7 +194,6 @@ module.exports.getInvoice = async function( req , res ){
 module.exports.logOut = function(req , res ){
 
     //Clear token from cookie
-
     return res.clearCookie("access_token").status(200).json({
         message : "logOut successfully"
     })

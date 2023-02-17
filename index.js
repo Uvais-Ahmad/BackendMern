@@ -11,14 +11,12 @@ app.use(express.urlencoded({extended : true}));
 app.use(express.json());
 app.use(cors());
 
-app.use(express.static('assets'))
-app.set('view engine', 'ejs');
-app.set('views','./views'); 
+
 
 app.use('/',require('./routers'));
 app.listen(port , function( err ){
     if(err){
         console.log('Error on running the server ')
     }
-    console.log("Applicaion of Voosh success running on port ",port);
+    console.log("Applicaion of Depo24 success running on port ",port);
 })
