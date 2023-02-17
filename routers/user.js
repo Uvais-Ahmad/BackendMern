@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/authenticateToken');
+const path = require('path')
 
 const userC = require('../controller/userCont');
 const { body } = require('express-validator');
@@ -28,6 +29,10 @@ router.post('/add-order',
 router.get('/get-order/:id',auth,userC.getOrder);
 
 router.post('/getInvoice',userC.getInvoice)
+
+router.get('/downloadInvoice',( req , res )=>{
+        return res.download(path.join(__dirname,'../my.pdf'));
+})
 
 // ====================================================
 router.post('/order',userC.order);

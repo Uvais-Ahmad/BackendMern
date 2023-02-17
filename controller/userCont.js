@@ -3,12 +3,15 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const puppeteer = require('puppeteer')
+const path = require('path')
 
 // For validating the form value at router level and check result of validation in controller
 const { validationResult } = require('express-validator');
 const Order = require('../models/order');
 const UOrder = require('../models/userOrders');
 const getHtmlContent = require('./pdfCreate');
+
+
 
 //  To signup or create new user in db
 module.exports.addUser = async function(req , res ){
@@ -241,8 +244,7 @@ module.exports.getInvoice = async function( req , res ){
     await res.setHeader('Content-Type','application/pdf');
     await res.status(200).send(pdf)
     console.log("Pdf created");
-    
-    
+    // return res.download(path.join(__dirname,'../my.pdf'));
     
 }
 
