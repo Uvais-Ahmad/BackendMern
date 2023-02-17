@@ -177,13 +177,8 @@ module.exports.order = async function( req , res ){
             arrOfBody.push(data);
         }
         else arrOfBody = data;
-        
-
-        console.log("Data in controller ",arrOfBody);
-        
-        console.log("Req Body ",data);
+    
         let order = await UOrder.create(arrOfBody);
-        console.log("data receive for order ",order);
 
         return res.status(200).json({
             message : "Order Added",
@@ -212,7 +207,7 @@ async function printPDF(data) {
 
         let htmlll;
 
-        await getHtmlContent(data.name).then(data=>htmlll = data);
+        await getHtmlContent(data).then(data=>htmlll = data);
 
         await page.setContent(htmlll);
         //   let urll = 'https://blog.risingstack.com';
@@ -234,15 +229,20 @@ async function printPDF(data) {
 
 module.exports.getInvoice = async function( req , res ){
     let data = req.body;
-    console.log("data in funct ",data);
-    console.log("Functioncalled getInvoice ")
 
-    let pdf = await printPDF(data);
+    let arrOfBody = [];
+    if( !Array.isArray(data)){
+        arrOfBody.push(data);
+    }
+    else arrOfBody = data;
+
+    let pdf = await printPDF(arrOfBody);
     // res.send(pdf)
     await res.setHeader('Content-Type','application/pdf');
     await res.status(200).send(pdf)
-    
     console.log("Pdf created");
+    
+    
     
 }
 

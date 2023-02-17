@@ -1,6 +1,7 @@
+let subTotal=0,subGst=0;
 async function getHtmlContent(data){
     try{
-
+        
         let css = `.invoice{
             border: 1px solid black;
             margin: 30px;
@@ -52,7 +53,11 @@ async function getHtmlContent(data){
         }`
 
         let logoUrl = `https://media.licdn.com/dms/image/C4D0BAQFsb1FUZlm7VQ/company-logo_200_200/0/1653373725419?e=2147483647&v=beta&t=Px09afQ77kT0wtN7_An4Uv8mjBFkzpOjs59Vh8AwEfg`;
+        let tableRows;
+        await getList(data).then(rows=>tableRows = rows);
 
+        //It gives Total Final amount in words
+        let amountInWords = await rupeInWords((subTotal+(subGst*2)).toFixed(2));
         let html = `<!DOCTYPE html>
         <html>
         <head>
@@ -146,93 +151,35 @@ async function getHtmlContent(data){
                         </thead>
         
                         <tbody>
-                            <tr>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                            </tr>
-        
-                            <tr>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                            </tr>
-        
-                            <tr>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                            </tr>
-        
-                            <tr>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                                <td>sdd</td>
-                            </tr>
-                            
+                            ${tableRows}
                         </tbody>
         
-        
                     </table>
-        
         
                 </main>
         
                 <footer class="d-flex">
                     <div class="left flex-fill border">
                         <p>Total in words</p>
-                        <p><b>Indian Rupee Two Thousand One Hundred Fifty-Three and Fifty Paise
-        Only</b></p>
+                        <p><b>${amountInWords}</b></p>
                     </div>
                     <div class="right flex-fill border">
-                        <div class="totalRs">
+                        <div class="totalRs mt-2">
                             <div class= "d-flex justify-content-center ">
                                 <p class="mx-4 my-0">Sub Total</p>
-                                <span class="mx-4 ">343</span>
+                                <span class="mx-4 ">${subTotal.toFixed(2)}</span>
                             </div>
                             <div class= "d-flex justify-content-center ">
                                 <p class="mx-4 my-0">CGST(9%)</p>
-                                <span class="mx-4">343</span>
+                                <span class="mx-4">${subGst.toFixed(2)}</span>
                             </div>
                             <div class= "d-flex justify-content-center ">
                                 <p class="mx-4 my-0">SGST(9%)</p>
-                                <span class="mx-4">343</span>
+                                <span class="mx-4">${subGst.toFixed(2)}</span>
                             </div>
                             <div class= "d-flex justify-content-center ">
                                 <p class="mx-4 my-0 flex-end"><b>Total</b></p>
-                                <span class="mx-4"><b>34848</b></span>
+                                <span class="mx-4"><b>${(subTotal+(subGst*2)).toFixed(2)}</b></span>
                             </div>
         
                         </div>
@@ -253,18 +200,49 @@ async function getHtmlContent(data){
 }
 
 
-async function getList(){
+async function getList(data){
+    subTotal=0;subGst=0;
     try{
-        let data = '';
-        for(let i=0 ; i<10 ; i++){
-            data+=`<h4>This is Count ${i}</h4>`
-        }
-        return data;
+        let tableRows='';
+        let i=1;
+        for(let prod of data){
+            let principal = prod.MRP*prod.Unit;
+            let amount = principal-(principal*0.2);
+            let gst = amount*0.09;
+            subTotal+=amount;
+            subGst+=gst;
 
+            tableRows = tableRows+ `<tr>
+                                    <td>${i++}</td>
+                                    <td>${prod.SysListName}</td>
+                                    <td>${prod.HSNCode}</td>
+                                    <td>${prod.Unit}</td>
+                                    <td>${prod.MRP}</td>
+                                    <td>20.00%</td>
+                                    <td>9%</td>
+                                    <td>${gst.toFixed(2)}</td>
+                                    <td>9%</td>
+                                    <td>${gst.toFixed(2)}</td>
+                                    <td>${amount.toFixed(2)}</td> 
+                                </tr>`
+        }
+
+        return tableRows;
     }
     catch(err){
         console.log("Error while feching html ",err); 
     }
+}
+
+const { ToWords } = require('to-words');
+
+// This function convert amount in words
+async function rupeInWords(rupee){
+    const toWords = new ToWords();
+
+    let words = toWords.convert(rupee, { currency: true });
+    // words = Four Hundred Fifty Two Rupees Only
+    return words;
 }
 
 module.exports = getHtmlContent;
