@@ -163,7 +163,7 @@ async function printPDF(data,fileName) {
         
 
         const pdf = await page.pdf({path:`${fileName}`, format: 'A4',printBackground: true });
-        
+        console.log("PDF GOT ",pdf);
         await browser.close();
         return pdf
 
@@ -186,12 +186,34 @@ module.exports.getInvoice = async function( req , res ){
     let fileName = `${Date.now()}Invoice.pdf`;
     // console.log("FN : ",fileName);
 
-    let pdf = await printPDF(arrOfBody,fileName);
-    
+    const browser = await puppeteer.launch({ headless: true });
+        const page = await browser.newPage();
+
+        let htmlll;
+
+        await getHtmlContent(arrOfBody).then(data=>htmlll = data);
+
+        await page.setContent(htmlll);
+
+        page.emulateMediaType('screen')
+        
+
+        const pdf = await page.pdf({path:`${fileName}`, format: 'A4',printBackground: true });
+        console.log("PDF GOT ",pdf);
+        await browser.close();
+
+
+
+
+
+
+
+    // let pdf = await printPDF(arrOfBody,fileName);
+    // console.log("gottted pdf ",pdf);
     await res.setHeader('Content-Type','application/pdf');
     console.log("Pdf created",fileName);
-    return res.download(path.join(__dirname,`../${fileName}`));
-    
+    // return res.download(path.join(__dirname,`../${fileName}`));
+    return res.send(pdf);
     
 }
 
