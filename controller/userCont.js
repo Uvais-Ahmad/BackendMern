@@ -91,7 +91,7 @@ module.exports.loginUser = async function( req , res ){
         }
 
         //Generating the Token
-        let token =await jwt.sign(user.toJSON() , process.env.JWT_Secret , {expiresIn : '100000000'} );
+        let token =await jwt.sign(user.toJSON() , "myVooshAssignment" , {expiresIn : '100000000'} );
 
         
         // user is found and Set token in Cookies

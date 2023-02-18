@@ -11,7 +11,7 @@ const auth = (req , res , next )=>{
     }
 
     //verify the token and it return user object
-    const decoded_token = jwt.verify(token ,process.env.JWT_Secret);
+    const decoded_token = jwt.verify(token ,'myVooshAssignment');
     if( !decoded_token ){
         return res.status(401).json({
             message : "UnAuthorisez user"
