@@ -189,7 +189,6 @@ module.exports.getInvoice = async function( req , res ){
     let pdf = await printPDF(arrOfBody,fileName);
     
     await res.setHeader('Content-Type','application/pdf');
-    await res.status(200).send(pdf)
     console.log("Pdf created",fileName);
     return res.download(path.join(__dirname,`../${fileName}`));
     
