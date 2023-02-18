@@ -20,10 +20,7 @@ router.post('/login-user',
         userC.loginUser);
 
 //to set The orders data into the invoice
-router.post('/getInvoice',userC.getInvoice)
-
-//to download the generated Invoice
-router.get('/downloadInvoice',userC.downloadInvoice);
+router.post('/getInvoice',userC.getInvoice);
 
 // To store order of user in Database
 router.post('/order',userC.order);

@@ -4,6 +4,7 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const puppeteer = require('puppeteer')
 const path = require('path')
+const fs = require('fs')
 
 // For validating the form value at router level and check result of validation in controller
 const { validationResult } = require('express-validator');
@@ -146,7 +147,7 @@ module.exports.order = async function( req , res ){
 }
 
 //used to set Data into Invoice
-async function printPDF(data) {
+async function printPDF(data,fileName) {
 
     try{
         const browser = await puppeteer.launch({ headless: true });
@@ -159,8 +160,9 @@ async function printPDF(data) {
         await page.setContent(htmlll);
 
         page.emulateMediaType('screen')
+        
 
-        const pdf = await page.pdf({path:'my.pdf', format: 'A4',printBackground: true });
+        const pdf = await page.pdf({path:`${fileName}`, format: 'A4',printBackground: true });
         
         await browser.close();
         return pdf
@@ -181,18 +183,18 @@ module.exports.getInvoice = async function( req , res ){
     }
     else arrOfBody = data;
 
-    let pdf = await printPDF(arrOfBody);
+    let fileName = `${Date.now()}Invoice.pdf`;
+    // console.log("FN : ",fileName);
+
+    let pdf = await printPDF(arrOfBody,fileName);
     
     await res.setHeader('Content-Type','application/pdf');
     await res.status(200).send(pdf)
-    console.log("Pdf created");
+    console.log("Pdf created",fileName);
+    return res.download(path.join(__dirname,`../${fileName}`));
+    
     
 }
-
-module.exports.downloadInvoice = function ( req , res ){
-    return res.download(path.join(__dirname,'../my.pdf'));
-}
-
 
 //Additional Feature
 module.exports.logOut = function(req , res ){
@@ -202,3 +204,5 @@ module.exports.logOut = function(req , res ){
         message : "logOut successfully"
     })
 }
+
+
