@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 80;
+const port = 8000;
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv').config();
