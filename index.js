@@ -10,13 +10,12 @@ const cors = require('cors');
 const aws = require('aws-sdk');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-//config for aws
+//config for aws        ::::This is ALL S3 setup using multer We not used .
 aws.config.update({
     secretAccessKey:process.env.S3_SECRET_KEY,
     accessKeyId:process.env.S3_ACCESS_KEY,
     region:process.env.S3_REGION
 })
-
 const BUCKET = process.env.S3_BUCKET;
 //create s3 instance
 const s3 = new aws.S3();
@@ -50,7 +49,6 @@ app.get('/download/:filename', async ( req , res )=>{
     let x = await s3.getObject({Bucket:BUCKET,Key:filename}).promise();
     res.send(x.Body);
 })
-
 
 app.delete('/delete/:filename', async ( req , res )=>{
 
