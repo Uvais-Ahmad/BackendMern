@@ -1,5 +1,5 @@
 # Depo24 Mern
-This is the server side system of OOrder product and generating Invoice
+This is the server side system of Order product and generating Invoice
 
 ## Introduction
 
@@ -17,34 +17,33 @@ Here we create all REST APIs for Login,Signup , Order product and Generate the I
 
 <br/>
 
-## MERN Hosted Url : - **https://luminous-mermaid-ab6803.netlify.app**
-### ReactJs :: - **https://github.com/Uvais-Ahmad/Auth_Frontend**
-## Hosted (Deployed ) URL
- - **https://mernauth.onrender.com**
- This is the main Home deployed URL link.
+## MERN Hosted Url   : - **https://merninvoice.netlify.app/**
+## ReactJs           : - **https://github.com/Uvais-Ahmad/Auth_Frontend**
+## Server (Deployed ): - **https://mern-invoice.up.railway.app/**
+ This is the main Home deployed URL link of server ( RAILWAYS )
 
 ## Routes & URL
 
-- **https://mernauth.onrender.com/api/v1/add-user**
+- **https://mern-invoice.up.railway.app/api/v1/add-user**
   <p>To register as a new user</p>
   **we need to paas some values**
   *name , phone , pass , confirm_pass*
   *Please make sure or field value must valid*
 
 
-- **https://mernauth.onrender.com/api/v1/login-user**
+- **https://mern-invoice.up.railway.app/api/v1/login-user**
   <p>To login as a existing user</p>
   **we need to paas some values**
   *phone , pass*
   *Please make sure or field value must valid*
   <br/>
   
-  - **https://mernauth.onrender.com/api/v1/order**
+  - **https://mern-invoice.up.railway.app/api/v1/order**
   <p>To add a new orderr</p>
   *Please make sure or field value must valid*
   <br/>
   
-  - **https://mernauth.onrender.com/api/v1/logout**
+  - **https://mern-invoice.up.railway.app/api/v1/logout**
   <p>to loggin out</p>
   **we don't to paas authToken if you test on postman**
   <br/>
