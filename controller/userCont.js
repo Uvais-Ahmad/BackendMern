@@ -147,7 +147,7 @@ module.exports.order = async function( req , res ){
 }
 
 //used to set Data into Invoice
-async function printPDF(data,fileName) {
+async function printPDF(data,filepath) {
 
     try{
         const browser = await puppeteer.launch({ headless: true });
@@ -161,9 +161,10 @@ async function printPDF(data,fileName) {
 
         page.emulateMediaType('screen')
         
+        
 
-        const pdf = await page.pdf({path:`${fileName}`, format: 'A4',printBackground: true });
-        console.log("PDF GOT ",pdf);
+        const pdf = await page.pdf({path:`${filepath}`, format: 'A4',printBackground: true });
+        console.log("Pdf return ",filepath)
         await browser.close();
         return pdf
 
@@ -184,37 +185,16 @@ module.exports.getInvoice = async function( req , res ){
     else arrOfBody = data;
 
     let fileName = `${Date.now()}Invoice.pdf`;
-    // console.log("FN : ",fileName);
-
-    const browser = await puppeteer.launch({ headless: true });
-        const page = await browser.newPage();
-
-        let htmlll;
-
-        await getHtmlContent(arrOfBody).then(data=>htmlll = data);
-
-        await page.setContent(htmlll);
-
-        page.emulateMediaType('screen')
-        
-
-        const pdf = await page.pdf({path:`${fileName}`, format: 'A4',printBackground: true });
-        console.log("PDF GOT ",pdf);
-        await browser.close();
-
-
-
-
-
-
-
-    // let pdf = await printPDF(arrOfBody,fileName);
-    // console.log("gottted pdf ",pdf);
-    await res.setHeader('Content-Type','application/pdf');
-    console.log("Pdf created",fileName);
-    // return res.download(path.join(__dirname,`../${fileName}`));
-    return res.send(pdf);
     
+    let filepath = path.join(__dirname,`../invoice/${fileName}`);
+
+    await printPDF(arrOfBody,filepath);
+    
+    await res.setHeader('Content-Type','application/pdf');
+    console.log("Pdf created",filepath);
+
+    return res.download(filepath,err => {if(err) console.log("Error while download ",err)});
+       
 }
 
 //Additional Feature
