@@ -147,7 +147,7 @@ module.exports.order = async function( req , res ){
 }
 
 //used to set Data into Invoice
-async function printPDF(data,filepath) {
+async function printPDF(data,fileName) {
 
     try{
         const browser = await puppeteer.launch({ 
@@ -165,14 +165,14 @@ async function printPDF(data,filepath) {
         
         
 
-        const pdf = await page.pdf({path:`${filepath}`, format: 'A4',printBackground: true });
-        console.log("Pdf return ",filepath)
+        const pdf = await page.pdf({path:`${fileName}`, format: 'A4',printBackground: true });
+        console.log("Pdf return ",fileName)
+        console.log("Pdf cont ",pdf)
         await browser.close();
         return pdf
-
     }
     catch(err){
-        console.log("Error occur ",err);
+        console.log("Error occur on Creating pdf",err);
     }
   
 }
@@ -188,14 +188,14 @@ module.exports.getInvoice = async function( req , res ){
 
     let fileName = `${Date.now()}Invoice.pdf`;
     
-    let filepath = path.join(__dirname,`../invoice/${fileName}`);
+    // let filepath = path.join(__dirname,`../invoice/${fileName}`);
 
-    await printPDF(arrOfBody,filepath);
+    await printPDF(arrOfBody,fileName);
     
     await res.setHeader('Content-Type','application/pdf');
-    console.log("Pdf created",filepath);
+    console.log("Pdf created",fileName);
     
-    return res.download(filepath,err => {if(err) console.log("Error while download ",err)});
+    return res.download(fileName,err => {if(err) console.log("Error while download ",err)});
        
 }
 
