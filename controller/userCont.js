@@ -150,7 +150,9 @@ module.exports.order = async function( req , res ){
 async function printPDF(data,filepath) {
 
     try{
-        const browser = await puppeteer.launch({ headless: true });
+        const browser = await puppeteer.launch({ 
+            headless: true,
+            args:['--no-sandbox','--disable-setuid-sandbox'] });
         const page = await browser.newPage();
 
         let htmlll;
@@ -188,12 +190,12 @@ module.exports.getInvoice = async function( req , res ){
     
     let filepath = path.join(__dirname,`../invoice/${fileName}`);
 
-    await printPDF(arrOfBody,filepath);
+    let pdf = await printPDF(arrOfBody,filepath);
     
     await res.setHeader('Content-Type','application/pdf');
     console.log("Pdf created",filepath);
-
-    return res.download(filepath,err => {if(err) console.log("Error while download ",err)});
+    res.send(Buffer.from(pdf,'binary'));
+    // return res.download(filepath,err => {if(err) console.log("Error while download ",err)});
        
 }
 
